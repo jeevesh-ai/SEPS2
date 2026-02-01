@@ -119,7 +119,7 @@ function Answerviewer({ question, setQuestion, onBack, onAnswerFound }) {
         formData.append("mode", "question_only");
       }
 
-      const res = await fetch("http://127.0.0.1:8000/process_ai/", {
+      const res = await fetch("https://empty-toes-type.loca.lt/process_ai/", {
         method: "POST",
         body: formData,
       });
@@ -138,7 +138,7 @@ function Answerviewer({ question, setQuestion, onBack, onAnswerFound }) {
       formData.append("question", question);
       formData.append("pdf", pdfFile);
 
-      const res = await fetch("http://127.0.0.1:8000/pdf/save", {
+      const res = await fetch("https://empty-toes-type.loca.lt/pdf/save", {
         method: "POST",
         body: formData,
       });
@@ -163,7 +163,7 @@ function Answerviewer({ question, setQuestion, onBack, onAnswerFound }) {
     formData.append("pdfName", pdfName);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/pdf/get-answer", {
+      const res = await fetch("https://empty-toes-type.loca.lt/pdf/get-answer", {
         method: "POST",
         body: formData,
       });
