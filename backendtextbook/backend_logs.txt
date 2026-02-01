@@ -1,0 +1,4 @@
+Backend initialized and logging started.
+Backend initialized and logging started.
+Backend initialized and logging started.
+Root endpoint accessed.

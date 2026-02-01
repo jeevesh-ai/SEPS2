@@ -5,6 +5,11 @@ from utils import extract_text_from_pdf, ask_ai, ask_ai_general
 
 app = FastAPI()
 
+def log_message(msg):
+    with open("backend_logs.txt", "a", encoding="utf-8") as f:
+        f.write(f"{msg}\n")
+    print(msg)
+
 # -------------------------------
 # Allow requests from frontend
 # -------------------------------
@@ -15,6 +20,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+log_message("Backend initialized and logging started.")
 
 # -------------------------------
 # Ensure folders exist
@@ -28,6 +35,7 @@ Path("extracted").mkdir(exist_ok=True)
 # -------------------------------
 @app.get("/")
 def read_root():
+    log_message("Root endpoint accessed.")
     return {"message": "Textbook Backend is running!"}
 
 # -------------------------------
@@ -47,10 +55,10 @@ async def process_textbook(
 
         # 2️⃣ Extract text from PDF
         extracted_text = extract_text_from_pdf(pdf_path)
-        print(f"DEBUG: Extracted {len(extracted_text)} characters from {file.filename}")
+        log_message(f"DEBUG: Extracted {len(extracted_text)} characters from {file.filename}")
         
         if not extracted_text or len(extracted_text.strip()) < 50:
-            print(f"DEBUG: Extraction failed or too short for {file.filename}")
+            log_message(f"DEBUG: Extraction failed or too short for {file.filename}")
             return {
                 "status": "failure",
                 "message": f"Could not extract sufficient text from PDF (only {len(extracted_text)} chars found). Scanned PDFs or images are not supported."
@@ -62,18 +70,18 @@ async def process_textbook(
             f.write(extracted_text)
 
         # 4️⃣ Generate AI answer using question + extracted text + optional marks
-        print(f"DEBUG: Generating AI answer for question: {question}")
+        log_message(f"DEBUG: Generating AI answer for question: {question}")
         ai_answer = ask_ai(question, extracted_text, marks)
 
         if ai_answer == "AI processing failed.":
-            print("DEBUG: AI generation returned failure string")
+            log_message("DEBUG: AI generation returned failure string")
             return {
                 "status": "failure",
                 "message": "AI was unable to process the request. Please check your API key or try a different question."
             }
 
         # 5️⃣ Return structured response
-        print("DEBUG: Successfully generated structured answer")
+        log_message("DEBUG: Successfully generated structured answer")
         return {
             "status": "success",
             "filename": file.filename,
@@ -83,7 +91,7 @@ async def process_textbook(
         }
     
     except Exception as e:
-        print(f"DEBUG: Unexpected error in process_textbook: {str(e)}")
+        log_message(f"DEBUG: Unexpected error in process_textbook: {str(e)}")
         return {
             "status": "error",
             "message": str(e)

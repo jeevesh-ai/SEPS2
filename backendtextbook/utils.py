@@ -95,7 +95,7 @@ This is a {marks}-mark question. Adjust your answer accordingly:
         response = model.generate_content(prompt)
         return response.text.strip()
     except Exception as e:
-        print("AI error:", e)
+        print(f"AI ERROR during generation: {str(e)}")
         return "AI processing failed."
 
 # -------------------------------
