@@ -1,7 +1,7 @@
 {
   "name": "study-app",
   "version": "0.1.0",
-  "homepage": "https://jeevesh-ai.github.io/SEPS1/",
+  "homepage": "https://jeevesh-ai.github.io/SEPS2/",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
